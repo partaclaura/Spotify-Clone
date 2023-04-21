@@ -14,7 +14,13 @@ class NavBar extends StatelessWidget {
         children: [
           NavigationButton(buttonName: 'Home'),
           NavigationButton(buttonName: 'Search'),
-          NavigationButton(buttonName: 'Your library')
+          NavigationButton(buttonName: 'Your library'),
+          Container(
+            color: Colors.black,
+            height: 20,
+          ),
+          NavigationButton(buttonName: 'Create Playlist'),
+          NavigationButton(buttonName: 'Liked Songs')
         ],
       ),
     );

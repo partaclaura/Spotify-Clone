@@ -10,7 +10,7 @@ class LeftPannel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: 250,
+        width: 300,
         padding: EdgeInsets.symmetric(horizontal: 15),
         color: Colors.black,
         child: Column(

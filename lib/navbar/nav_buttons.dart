@@ -11,6 +11,10 @@ class NavigationButton extends StatelessWidget {
       return Icons.home;
     } else if (buttonName == 'Search') {
       return Icons.search;
+    } else if (buttonName == 'Create Playlist') {
+      return Icons.add;
+    } else if (buttonName == 'Liked Songs') {
+      return Icons.favorite;
     }
     return Icons.library_music;
   }
