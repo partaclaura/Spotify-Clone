@@ -17,18 +17,27 @@ class SmallPlaylist extends StatelessWidget {
         child: Row(
           children: [
             Container(
-              color: Colors.black,
+              decoration: const BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(5),
+                      bottomLeft: Radius.circular(5))),
               width: 70,
             ),
             Container(
                 height: 70,
                 width: setWidth,
-                padding: EdgeInsets.symmetric(vertical: 25, horizontal: 5),
-                color: Color.fromRGBO(44, 44, 52, 1),
-                child: Text(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 25, horizontal: 5),
+                decoration: const BoxDecoration(
+                    color: Color.fromRGBO(44, 44, 52, 1),
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(5),
+                        bottomRight: Radius.circular(5))),
+                child: const Text(
                   "Playlist Name",
                   textAlign: TextAlign.left,
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
                       color: Colors.white),

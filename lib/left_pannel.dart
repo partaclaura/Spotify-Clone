@@ -11,9 +11,12 @@ class LeftPannel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         width: 300,
+        height: MediaQuery.of(context).size.height,
         padding: EdgeInsets.symmetric(horizontal: 15),
         color: Colors.black,
-        child: Column(
+        child: SingleChildScrollView(
+            child: Column(
+          mainAxisSize: MainAxisSize.max,
           children: [
             NavBar(),
             Divider(
@@ -22,6 +25,6 @@ class LeftPannel extends StatelessWidget {
             ),
             Playlists(),
           ],
-        ));
+        )));
   }
 }
