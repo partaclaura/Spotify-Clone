@@ -7,6 +7,29 @@ class PlaylistRow extends StatelessWidget {
   List<Playlist> playlists;
   PlaylistRow({required this.rowName, required this.playlists});
 
+  List<Widget> createPlaylistCards(BuildContext context) {
+    int cardsPerRow = 5;
+    List<Widget> cards = [];
+    if (MediaQuery.of(context).size.width > 1102 &&
+        MediaQuery.of(context).size.width <= 1384) {
+      cardsPerRow = 4;
+    } else if (MediaQuery.of(context).size.width > 900 &&
+        MediaQuery.of(context).size.width <= 1102) {
+      cardsPerRow = 3;
+    } else if (MediaQuery.of(context).size.width <= 900) {
+      cardsPerRow = 2;
+    }
+
+    for (int i = 0; i < cardsPerRow; i++) {
+      cards.add(CardPlaylist(playlist: playlists[i]));
+      cards.add(Container(
+        width: 20,
+      ));
+    }
+
+    return cards;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -25,14 +48,8 @@ class PlaylistRow extends StatelessWidget {
                     color: Colors.white),
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CardPlaylist(playlist: playlists[0]),
-                  CardPlaylist(playlist: playlists[1]),
-                  CardPlaylist(playlist: playlists[2]),
-                  CardPlaylist(playlist: playlists[3]),
-                  CardPlaylist(playlist: playlists[4]),
-                ],
+                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: createPlaylistCards(context),
               )
             ],
           ),
