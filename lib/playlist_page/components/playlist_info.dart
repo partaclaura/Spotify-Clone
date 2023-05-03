@@ -7,6 +7,21 @@ class PlaylistInfo extends StatelessWidget {
   Playlist playlist;
   PlaylistInfo({required this.playlist});
 
+  TextStyle setStyle(double size) {
+    return TextStyle(
+        fontWeight: FontWeight.bold, fontSize: size, color: Colors.white);
+  }
+
+  Widget setPlaylistName() {
+    return Container(
+      padding: const EdgeInsets.only(top: 5, bottom: 10),
+      child: Text(
+        playlist.name,
+        style: setStyle(60),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -20,21 +35,28 @@ class PlaylistInfo extends StatelessWidget {
             color: Colors.black,
           ),
           Container(
-              padding: EdgeInsets.all(20),
+              height: 250,
+              padding: const EdgeInsets.all(15),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text(playlist.playlistType),
-                  Text(playlist.name),
-                  Text(playlist.description),
+                  Text(playlist.playlistType, style: setStyle(17)),
+                  setPlaylistName(),
+                  Text(
+                    playlist.description,
+                    style: setStyle(15),
+                  ),
                   Row(
                     children: [
-                      // TODO: add dots between info
-                      Text(playlist.owner),
-                      Text("${playlist.likes} likes"),
-                      // TODO: these two in one string, separated by coma
-                      Text("${playlist.songsCount} songs"),
-                      Text("${playlist.minutes} min")
+                      Text(
+                        "${playlist.owner} • ${playlist.likes} likes • ${playlist.songsCount} songs, ",
+                        style: setStyle(15),
+                      ),
+                      Text(
+                        "${playlist.minutes} min",
+                        style: setStyle(15),
+                      )
                     ],
                   )
                 ],

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'components/playlist_info.dart';
+import 'components/song_list.dart';
 import '../playlist.dart';
 
 class PlaylistView extends StatelessWidget {
@@ -20,6 +21,7 @@ class PlaylistView extends StatelessWidget {
                   PlaylistInfo(
                     playlist: playlist,
                   ),
+                  SongList(songList: playlist.songs),
                 ]))));
   }
 }
