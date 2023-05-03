@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'home/home.dart';
+import 'playlist_page/playlist_page.dart';
+import 'playlist.dart';
 
 void main() {
   runApp(MaterialApp(home: MyApp()));
@@ -19,7 +21,7 @@ class _State extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
         home: Scaffold(
-      body: Home(),
+      body: PlaylistPage(playlist: Playlist(name: "Playlist Name")),
     ));
   }
 }
