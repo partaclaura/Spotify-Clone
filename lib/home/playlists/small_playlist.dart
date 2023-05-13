@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import '../../playlist.dart';
 
 class SmallPlaylist extends StatelessWidget {
+  Playlist playlist;
+  SmallPlaylist({required this.playlist});
+
   @override
   Widget build(BuildContext context) {
     double setWidth;
@@ -34,10 +38,10 @@ class SmallPlaylist extends StatelessWidget {
                     borderRadius: BorderRadius.only(
                         topRight: Radius.circular(5),
                         bottomRight: Radius.circular(5))),
-                child: const Text(
-                  "Playlist Name",
+                child: Text(
+                  playlist.name,
                   textAlign: TextAlign.left,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
                       color: Colors.white),

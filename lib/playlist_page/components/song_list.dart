@@ -2,21 +2,43 @@
 
 import 'package:flutter/material.dart';
 import '../../song.dart';
+import 'dart:convert';
+import 'package:flutter/services.dart';
 
-class SongList extends StatelessWidget {
-  List<Song> songList;
+class SongList extends StatefulWidget {
+  List songList;
   SongList({required this.songList});
+
+  @override
+  _State createState() => _State();
+}
+
+class _State extends State<SongList> {
+  Future<List> getSongs() async {
+    List playlistSongs = [];
+    final String response = await rootBundle.loadString('assets/songs.json');
+    final data = await json.decode(response);
+    setState(() {
+      List songs = data['songs'];
+      for (var song in songs) {
+        if (widget.songList.contains(song['songId'])) {
+          playlistSongs.add(song);
+        }
+      }
+    });
+    return playlistSongs;
+  }
 
   Widget createHeader() {
     return Container(
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+      child: Row(children: [
         createColumn("#", 25),
         createColumn("Title", 350),
         createColumn("Album", 200),
         createColumn("Date added", 200),
         Container(
-            padding: EdgeInsets.only(left: 5, right: 5),
-            child: Icon(
+            padding: const EdgeInsets.only(left: 5, right: 5),
+            child: const Icon(
               Icons.schedule,
               color: Colors.grey,
             ))
@@ -27,12 +49,11 @@ class SongList extends StatelessWidget {
   Widget createSongEntry(int index, Song song) {
     return Container(
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           createColumn(index.toString(), 25),
           createColumn(song.title, 350),
           createColumn(song.album, 200),
-          createColumn(song.addDate, 200),
+          createColumn("Date added", 200),
           createColumn(song.length.toString(), 200)
         ],
       ),
@@ -46,7 +67,10 @@ class SongList extends StatelessWidget {
         child: Text(
           text,
           style: TextStyle(
-              fontWeight: FontWeight.bold, fontSize: 15, color: Colors.grey),
+            fontWeight: FontWeight.bold,
+            fontSize: 15,
+            color: Colors.grey,
+          ),
         ));
   }
 
@@ -58,6 +82,23 @@ class SongList extends StatelessWidget {
           color: Colors.grey,
           height: 0.1,
         ),
+        FutureBuilder(
+            future: getSongs(),
+            builder: (BuildContext context, AsyncSnapshot<List> snapshot) =>
+                snapshot.hasData
+                    ? ListView.separated(
+                        shrinkWrap: true,
+                        itemCount: widget.songList.length,
+                        separatorBuilder: (BuildContext context, int index) {
+                          return SizedBox(
+                            height: 10,
+                          );
+                        },
+                        itemBuilder: (BuildContext context, int index) {
+                          return createSongEntry(
+                              index + 1, Song(snapshot.data![index]));
+                        })
+                    : Center(child: CircularProgressIndicator()))
       ],
     );
   }

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import '../playlist.dart';
 import '../left_pannel.dart';
+import '../user.dart';
 import 'playlist_view.dart';
 
 class PlaylistPage extends StatelessWidget {
   Playlist playlist;
-  PlaylistPage({required this.playlist});
+  User user;
+  PlaylistPage({required this.playlist, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -15,9 +17,11 @@ class PlaylistPage extends StatelessWidget {
                 height: double.infinity,
                 child: SingleChildScrollView(
                     child: Row(children: [
-                  LeftPannel(),
+                  LeftPannel(
+                    user: user,
+                  ),
                   PlaylistView(
-                    playlist: Playlist(name: "Playlist Name"),
+                    playlist: playlist,
                   )
                 ])))));
   }

@@ -4,10 +4,20 @@ import 'package:flutter/material.dart';
 import 'components/playlist_info.dart';
 import 'components/song_list.dart';
 import '../playlist.dart';
+import '../song.dart';
 
 class PlaylistView extends StatelessWidget {
   Playlist playlist;
   PlaylistView({required this.playlist});
+
+  List<Song> createSongList() {
+    List<Song> songs = [];
+    for (var songId in playlist.songs) {
+      songs.add(Song(songId));
+    }
+    return songs;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Expanded(

@@ -1,10 +1,13 @@
 // ignore_for_file: prefer_const_constructors_in_immutables, must_be_immutable, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import '../user.dart';
+import '../home/home.dart';
 
 class NavigationButton extends StatelessWidget {
   String buttonName;
-  NavigationButton({super.key, required this.buttonName});
+  User user;
+  NavigationButton({super.key, required this.buttonName, required this.user});
 
   IconData matchButtonIcon() {
     if (buttonName == 'Home') {
@@ -27,7 +30,13 @@ class NavigationButton extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
             backgroundColor: Colors.black, padding: EdgeInsets.all(0)),
-        onPressed: () {},
+        onPressed: () {
+          if (buttonName == "Home") {
+            Navigator.push(context, MaterialPageRoute(builder: (builder) {
+              return Home(user: user);
+            }));
+          }
+        },
         child: SizedBox(
           width: double.infinity,
           child: Wrap(

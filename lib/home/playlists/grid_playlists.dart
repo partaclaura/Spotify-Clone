@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'small_playlist.dart';
+import '../../playlist.dart';
 
 class GridPlaylists extends StatelessWidget {
+  List playlists;
+  GridPlaylists({super.key, required this.playlists});
+
   @override
   Widget build(BuildContext context) {
     if (MediaQuery.of(context).size.width < 1250) {
@@ -15,11 +19,15 @@ class GridPlaylists extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 child: Row(
                   children: [
-                    SmallPlaylist(),
+                    SmallPlaylist(
+                      playlist: Playlist(playlists[0]),
+                    ),
                     Container(
                       width: 20,
                     ),
-                    SmallPlaylist()
+                    SmallPlaylist(
+                      playlist: Playlist(playlists[1]),
+                    )
                   ],
                 ),
               ),
@@ -30,11 +38,15 @@ class GridPlaylists extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 child: Row(
                   children: [
-                    SmallPlaylist(),
+                    SmallPlaylist(
+                      playlist: Playlist(playlists[2]),
+                    ),
                     Container(
                       width: 20,
                     ),
-                    SmallPlaylist()
+                    SmallPlaylist(
+                      playlist: Playlist(playlists[3]),
+                    )
                   ],
                 ),
               ),
@@ -45,11 +57,15 @@ class GridPlaylists extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 child: Row(
                   children: [
-                    SmallPlaylist(),
+                    SmallPlaylist(
+                      playlist: Playlist(playlists[4]),
+                    ),
                     Container(
                       width: 20,
                     ),
-                    SmallPlaylist()
+                    SmallPlaylist(
+                      playlist: Playlist(playlists[5]),
+                    )
                   ],
                 ),
               ),
@@ -66,15 +82,21 @@ class GridPlaylists extends StatelessWidget {
             child: Row(
               //mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SmallPlaylist(),
+                SmallPlaylist(
+                  playlist: Playlist(playlists[0]),
+                ),
                 Container(
                   width: 20,
                 ),
-                SmallPlaylist(),
+                SmallPlaylist(
+                  playlist: Playlist(playlists[1]),
+                ),
                 Container(
                   width: 20,
                 ),
-                SmallPlaylist()
+                SmallPlaylist(
+                  playlist: Playlist(playlists[2]),
+                )
               ],
             )),
         Container(
@@ -85,15 +107,21 @@ class GridPlaylists extends StatelessWidget {
             child: Row(
               //mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SmallPlaylist(),
+                SmallPlaylist(
+                  playlist: Playlist(playlists[3]),
+                ),
                 Container(
                   width: 20,
                 ),
-                SmallPlaylist(),
+                SmallPlaylist(
+                  playlist: Playlist(playlists[4]),
+                ),
                 Container(
                   width: 20,
                 ),
-                SmallPlaylist()
+                SmallPlaylist(
+                  playlist: Playlist(playlists[5]),
+                )
               ],
             )),
       ]),

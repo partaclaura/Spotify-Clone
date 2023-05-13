@@ -8,8 +8,8 @@ class Playlists extends StatelessWidget {
         color: Colors.black,
         child: Column(
           children: [
-            PlaylistButton(playlistName: 'CustomPlaylist'),
-            PlaylistButton(playlistName: 'CustomPlaylist')
+            //PlaylistButton(playlistName: 'CustomPlaylist'),
+            //PlaylistButton(playlistName: 'CustomPlaylist')
           ],
         ));
   }

@@ -5,50 +5,50 @@ import '../left_pannel.dart';
 import 'top_playlists.dart';
 import 'playlists/row_playlists.dart';
 import '../playlist.dart';
+import '../user.dart';
 
 class Home extends StatelessWidget {
-  const Home({super.key});
+  User user;
+  Home({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         home: Scaffold(
             body: Container(
-                height: double.infinity,
+      height: MediaQuery.of(context).size.height,
+      child: Row(children: [
+        LeftPannel(
+          user: user,
+        ),
+        Expanded(
+            child: Container(
+                color: Color.fromRGBO(26, 26, 26, 1),
+                height: MediaQuery.of(context).size.height,
                 child: SingleChildScrollView(
-                  child: Row(children: [
-                    LeftPannel(),
-                    Expanded(
-                        child: Container(
-                            color: Color.fromRGBO(26, 26, 26, 1),
-                            height: MediaQuery.of(context).size.height,
-                            child: SingleChildScrollView(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  TopPlaylists(),
-                                  PlaylistRow(
-                                      rowName: "Your top mixes",
-                                      playlists: [
-                                        Playlist(name: 'Rock Mix'),
-                                        Playlist(name: 'Pop Mix'),
-                                        Playlist(name: 'Jazz Mix'),
-                                        Playlist(name: 'Chill Mix'),
-                                        Playlist(name: '70\' Mix')
-                                      ]),
-                                  PlaylistRow(
-                                      rowName: "Made for User",
-                                      playlists: [
-                                        Playlist(name: 'Daily Mix 1'),
-                                        Playlist(name: 'Daily Mix 2'),
-                                        Playlist(name: 'Daily Mix 3'),
-                                        Playlist(name: 'Daily Mix 4'),
-                                        Playlist(name: 'Daily Mix 5')
-                                      ]),
-                                ],
-                              ),
-                            )))
-                  ]),
-                ))));
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TopPlaylists(user: user),
+                      PlaylistRow(
+                        rowName: "Your top mixes",
+                        user: user,
+                        rowType: "spotify_mix",
+                      ),
+                      PlaylistRow(
+                        rowName: "Made for User",
+                        user: user,
+                        rowType: "for_user",
+                      ),
+                      PlaylistRow(
+                        rowName: "Uniquely yours",
+                        user: user,
+                        rowType: "uniquely_yours",
+                      )
+                    ],
+                  ),
+                )))
+      ]),
+    )));
   }
 }

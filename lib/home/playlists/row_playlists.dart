@@ -1,13 +1,23 @@
 import 'package:flutter/material.dart';
 import '../../playlist.dart';
 import 'card_playlist.dart';
+import '../../user.dart';
+import 'dart:convert';
+import 'package:flutter/services.dart';
 
-class PlaylistRow extends StatelessWidget {
+class PlaylistRow extends StatefulWidget {
   String rowName;
-  List<Playlist> playlists;
-  PlaylistRow({required this.rowName, required this.playlists});
+  User user;
+  String rowType;
+  PlaylistRow(
+      {required this.rowName, required this.user, required this.rowType});
 
-  List<Widget> createPlaylistCards(BuildContext context) {
+  @override
+  _State createState() => _State();
+}
+
+class _State extends State<PlaylistRow> {
+  List<Widget> createPlaylistCards(BuildContext context, List playlists) {
     int cardsPerRow = 5;
     List<Widget> cards = [];
     if (MediaQuery.of(context).size.width > 1102 &&
@@ -20,14 +30,40 @@ class PlaylistRow extends StatelessWidget {
       cardsPerRow = 2;
     }
 
+    if (playlists.length < cardsPerRow) {
+      cardsPerRow = playlists.length;
+    }
+
     for (int i = 0; i < cardsPerRow; i++) {
-      cards.add(CardPlaylist(playlist: playlists[i]));
+      cards.add(CardPlaylist(playlist: Playlist(playlists[i])));
       cards.add(Container(
         width: 20,
       ));
     }
 
     return cards;
+  }
+
+  Future<List> getRowPlaylists(String rowType) async {
+    List userPlaylists = [];
+    List rowPlaylists = [];
+    final String response =
+        await rootBundle.loadString('assets/playlists.json');
+    final data = await json.decode(response);
+    setState(() {
+      List users = data['users'];
+      for (var u in users) {
+        if (u['userId'] == widget.user.id) {
+          userPlaylists = u['playlists'];
+        }
+      }
+    });
+
+    for (var playlist in userPlaylists) {
+      if (playlist['type'] == rowType) rowPlaylists.add(playlist);
+    }
+
+    return rowPlaylists;
   }
 
   @override
@@ -41,15 +77,22 @@ class PlaylistRow extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                rowName,
+                widget.rowName,
                 style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 30,
                     color: Colors.white),
               ),
-              Row(
-                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: createPlaylistCards(context),
+              FutureBuilder(
+                future: getRowPlaylists(widget.rowType),
+                builder: (BuildContext context, AsyncSnapshot<List> snapshot) =>
+                    snapshot.hasData
+                        ? Row(
+                            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children:
+                                createPlaylistCards(context, snapshot.data!),
+                          )
+                        : Center(child: CircularProgressIndicator()),
               )
             ],
           ),

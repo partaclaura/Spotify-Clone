@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'nav_buttons.dart';
+import '../user.dart';
 
 class NavBar extends StatelessWidget {
-  const NavBar({super.key});
+  User user;
+  NavBar({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -12,15 +14,30 @@ class NavBar extends StatelessWidget {
       child: Column(
         // mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          NavigationButton(buttonName: 'Home'),
-          NavigationButton(buttonName: 'Search'),
-          NavigationButton(buttonName: 'Your library'),
+          NavigationButton(
+            buttonName: 'Home',
+            user: user,
+          ),
+          NavigationButton(
+            buttonName: 'Search',
+            user: user,
+          ),
+          NavigationButton(
+            buttonName: 'Your library',
+            user: user,
+          ),
           Container(
             color: Colors.black,
             height: 20,
           ),
-          NavigationButton(buttonName: 'Create Playlist'),
-          NavigationButton(buttonName: 'Liked Songs')
+          NavigationButton(
+            buttonName: 'Create Playlist',
+            user: user,
+          ),
+          NavigationButton(
+            buttonName: 'Liked Songs',
+            user: user,
+          )
         ],
       ),
     );
