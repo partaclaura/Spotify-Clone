@@ -13,7 +13,7 @@ class PlaylistRow extends StatefulWidget {
       {required this.rowName, required this.user, required this.rowType});
 
   @override
-  _State createState() => _State();
+  _State get createState => _State();
 }
 
 class _State extends State<PlaylistRow> {

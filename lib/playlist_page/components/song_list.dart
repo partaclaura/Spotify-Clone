@@ -10,7 +10,7 @@ class SongList extends StatefulWidget {
   SongList({required this.songList});
 
   @override
-  _State createState() => _State();
+  _State get createState => _State();
 }
 
 class _State extends State<SongList> {

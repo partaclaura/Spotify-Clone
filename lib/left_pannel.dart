@@ -13,7 +13,7 @@ class LeftPannel extends StatefulWidget {
   LeftPannel({required this.user});
 
   @override
-  _State createState() => _State();
+  _State get createState => _State();
 }
 
 class _State extends State<LeftPannel> {

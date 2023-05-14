@@ -9,7 +9,7 @@ class TopPlaylists extends StatefulWidget {
   TopPlaylists({super.key, required this.user});
 
   @override
-  _State createState() => _State();
+  _State get createState => _State();
 }
 
 class _State extends State<TopPlaylists> {
