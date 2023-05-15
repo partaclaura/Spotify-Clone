@@ -1,8 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:spotify_clone/home/playlists/grid_playlists.dart';
 import '../user.dart';
-import 'dart:convert';
+import '../platform.dart';
+
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'dart:convert';
 
 class TopPlaylists extends StatefulWidget {
   User user;
@@ -24,6 +26,15 @@ class _State extends State<TopPlaylists> {
       return "Good evening";
     }
     return "Hello";
+  }
+
+  double setMessageSize() {
+    if (isWeb()) return 30;
+    return 22;
+  }
+
+  double setPaddingSize() {
+    return isWeb() ? 30 : 5;
   }
 
   int sortByClicks(dynamic a, dynamic b) {
@@ -51,9 +62,6 @@ class _State extends State<TopPlaylists> {
       }
     });
 
-    //userPlaylists.sort((a, b) {
-    //  return b['clicks'].toString().compareTo(a['clicks'].toString());
-    //});
     userPlaylists.sort(sortByClicks);
 
     return userPlaylists.take(6).toList();
@@ -64,15 +72,15 @@ class _State extends State<TopPlaylists> {
     return Container(
         color: Colors.grey,
         width: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+        padding: EdgeInsets.all(setPaddingSize()),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               getMessage(),
-              style: const TextStyle(
+              style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 30,
+                  fontSize: setMessageSize(),
                   color: Colors.white),
             ),
             //GridPlaylists()
@@ -82,6 +90,7 @@ class _State extends State<TopPlaylists> {
                   snapshot.hasData
                       ? GridPlaylists(
                           playlists: snapshot.data!,
+                          user: widget.user,
                         )
                       : Center(child: CircularProgressIndicator()),
             )

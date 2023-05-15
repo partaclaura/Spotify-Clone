@@ -1,9 +1,8 @@
 // ignore_for_file: prefer_const_constructors, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
+import 'package:spotify_clone/platform.dart';
 import 'home/home.dart';
-import 'playlist_page/playlist_page.dart';
-import 'playlist.dart';
 import 'user.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
@@ -36,20 +35,28 @@ class _MyAppState extends State<MyApp> {
     return user;
   }
 
+  Widget createUserSessionApp() {
+    return FutureBuilder(
+        future: initUser(12345),
+        builder: (BuildContext context, AsyncSnapshot<Map> snapshot) =>
+            snapshot.hasData
+                ? Home(
+                    user: User(
+                        id: snapshot.data!['id'],
+                        username: snapshot.data!['username']))
+                : Center(
+                    child: CircularProgressIndicator(),
+                  ));
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (isWeb()) {
+      return MaterialApp(home: Scaffold(body: createUserSessionApp()));
+    }
     return MaterialApp(
         home: Scaffold(
-            body: FutureBuilder(
-                future: initUser(12345),
-                builder: (BuildContext context, AsyncSnapshot<Map> snapshot) =>
-                    snapshot.hasData
-                        ? Home(
-                            user: User(
-                                id: snapshot.data!['id'],
-                                username: snapshot.data!['username']))
-                        : Center(
-                            child: CircularProgressIndicator(),
-                          ))));
+      body: createUserSessionApp(),
+    ));
   }
 }

@@ -4,6 +4,7 @@ import 'card_playlist.dart';
 import '../../user.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
+import '../../platform.dart';
 
 class PlaylistRow extends StatefulWidget {
   String rowName;
@@ -17,17 +18,25 @@ class PlaylistRow extends StatefulWidget {
 }
 
 class _State extends State<PlaylistRow> {
+  double getPadding() {
+    return isWeb() ? 30 : 10;
+  }
+
   List<Widget> createPlaylistCards(BuildContext context, List playlists) {
-    int cardsPerRow = 5;
     List<Widget> cards = [];
-    if (MediaQuery.of(context).size.width > 1102 &&
-        MediaQuery.of(context).size.width <= 1384) {
-      cardsPerRow = 4;
-    } else if (MediaQuery.of(context).size.width > 900 &&
-        MediaQuery.of(context).size.width <= 1102) {
-      cardsPerRow = 3;
-    } else if (MediaQuery.of(context).size.width <= 900) {
-      cardsPerRow = 2;
+    int cardsPerRow = 5;
+    double dividerSize = 10;
+    if (isWeb()) {
+      dividerSize = 20;
+      if (MediaQuery.of(context).size.width > 1102 &&
+          MediaQuery.of(context).size.width <= 1384) {
+        cardsPerRow = 4;
+      } else if (MediaQuery.of(context).size.width > 900 &&
+          MediaQuery.of(context).size.width <= 1102) {
+        cardsPerRow = 3;
+      } else if (MediaQuery.of(context).size.width <= 900) {
+        cardsPerRow = 2;
+      }
     }
 
     if (playlists.length < cardsPerRow) {
@@ -35,9 +44,10 @@ class _State extends State<PlaylistRow> {
     }
 
     for (int i = 0; i < cardsPerRow; i++) {
-      cards.add(CardPlaylist(playlist: Playlist(playlists[i])));
+      cards.add(
+          CardPlaylist(playlist: Playlist(playlists[i]), user: widget.user));
       cards.add(Container(
-        width: 20,
+        width: dividerSize,
       ));
     }
 
@@ -66,12 +76,25 @@ class _State extends State<PlaylistRow> {
     return rowPlaylists;
   }
 
+  Widget createRow(BuildContext context, List playlists) {
+    List<Widget> cardPlaylists = createPlaylistCards(context, playlists);
+    if (isWeb()) {
+      return Row(
+        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: cardPlaylists,
+      );
+    }
+
+    return SingleChildScrollView(
+        scrollDirection: Axis.horizontal, child: Row(children: cardPlaylists));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
         color: Colors.grey,
         width: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+        padding: EdgeInsets.all(getPadding()),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,11 +110,7 @@ class _State extends State<PlaylistRow> {
                 future: getRowPlaylists(widget.rowType),
                 builder: (BuildContext context, AsyncSnapshot<List> snapshot) =>
                     snapshot.hasData
-                        ? Row(
-                            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children:
-                                createPlaylistCards(context, snapshot.data!),
-                          )
+                        ? createRow(context, snapshot.data!)
                         : Center(child: CircularProgressIndicator()),
               )
             ],

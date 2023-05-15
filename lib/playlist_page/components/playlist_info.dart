@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import '../../playlist.dart';
+import '../../platform.dart';
 
 class PlaylistInfo extends StatelessWidget {
   Playlist playlist;
@@ -22,47 +23,52 @@ class PlaylistInfo extends StatelessWidget {
     );
   }
 
+  List<Widget> getComponentChildren() {
+    return [
+      Container(
+        height: 225,
+        width: 225,
+        color: Colors.black,
+      ),
+      Container(
+          height: 250,
+          padding: const EdgeInsets.all(15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(playlist.playlistType, style: setStyle(17)),
+              setPlaylistName(),
+              Text(
+                playlist.description,
+                style: setStyle(15),
+              ),
+              Row(
+                children: [
+                  Text(
+                    "${playlist.owner} • ${playlist.likes} likes • ${playlist.songsCount} songs, ",
+                    style: setStyle(15),
+                  ),
+                  Text(
+                    "${playlist.minutes} min",
+                    style: setStyle(15),
+                  )
+                ],
+              )
+            ],
+          ))
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
+    Widget componentType = isWeb()
+        ? Row(children: getComponentChildren())
+        : Column(children: getComponentChildren());
     return Container(
       color: Colors.grey,
       padding: const EdgeInsets.only(left: 25, right: 25, top: 60, bottom: 25),
-      child: Row(
-        children: [
-          Container(
-            height: 225,
-            width: 225,
-            color: Colors.black,
-          ),
-          Container(
-              height: 250,
-              padding: const EdgeInsets.all(15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text(playlist.playlistType, style: setStyle(17)),
-                  setPlaylistName(),
-                  Text(
-                    playlist.description,
-                    style: setStyle(15),
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        "${playlist.owner} • ${playlist.likes} likes • ${playlist.songsCount} songs, ",
-                        style: setStyle(15),
-                      ),
-                      Text(
-                        "${playlist.minutes} min",
-                        style: setStyle(15),
-                      )
-                    ],
-                  )
-                ],
-              ))
-        ],
-      ),
+      child: componentType,
     );
   }
 }

@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
 import 'small_playlist.dart';
 import '../../playlist.dart';
+import '../../platform.dart';
+import '../../user.dart';
 
 class GridPlaylists extends StatelessWidget {
   List playlists;
-  GridPlaylists({super.key, required this.playlists});
+  User user;
+  GridPlaylists({super.key, required this.playlists, required this.user});
+
+  double setHorizontalSpacing() {
+    return isWeb() ? 10 : 5;
+  }
+
+  double setVerticalSpacing() {
+    return isWeb() ? 20 : 5;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,18 +32,20 @@ class GridPlaylists extends StatelessWidget {
                   children: [
                     SmallPlaylist(
                       playlist: Playlist(playlists[0]),
+                      user: user,
                     ),
                     Container(
-                      width: 20,
+                      width: setVerticalSpacing(),
                     ),
                     SmallPlaylist(
                       playlist: Playlist(playlists[1]),
+                      user: user,
                     )
                   ],
                 ),
               ),
               Container(
-                height: 10,
+                height: setHorizontalSpacing(),
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
@@ -40,18 +53,20 @@ class GridPlaylists extends StatelessWidget {
                   children: [
                     SmallPlaylist(
                       playlist: Playlist(playlists[2]),
+                      user: user,
                     ),
                     Container(
-                      width: 20,
+                      width: setVerticalSpacing(),
                     ),
                     SmallPlaylist(
                       playlist: Playlist(playlists[3]),
+                      user: user,
                     )
                   ],
                 ),
               ),
               Container(
-                height: 10,
+                height: setHorizontalSpacing(),
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
@@ -59,12 +74,14 @@ class GridPlaylists extends StatelessWidget {
                   children: [
                     SmallPlaylist(
                       playlist: Playlist(playlists[4]),
+                      user: user,
                     ),
                     Container(
-                      width: 20,
+                      width: setVerticalSpacing(),
                     ),
                     SmallPlaylist(
                       playlist: Playlist(playlists[5]),
+                      user: user,
                     )
                   ],
                 ),
@@ -84,18 +101,21 @@ class GridPlaylists extends StatelessWidget {
               children: [
                 SmallPlaylist(
                   playlist: Playlist(playlists[0]),
+                  user: user,
                 ),
                 Container(
                   width: 20,
                 ),
                 SmallPlaylist(
                   playlist: Playlist(playlists[1]),
+                  user: user,
                 ),
                 Container(
                   width: 20,
                 ),
                 SmallPlaylist(
                   playlist: Playlist(playlists[2]),
+                  user: user,
                 )
               ],
             )),
@@ -109,18 +129,21 @@ class GridPlaylists extends StatelessWidget {
               children: [
                 SmallPlaylist(
                   playlist: Playlist(playlists[3]),
+                  user: user,
                 ),
                 Container(
                   width: 20,
                 ),
                 SmallPlaylist(
                   playlist: Playlist(playlists[4]),
+                  user: user,
                 ),
                 Container(
                   width: 20,
                 ),
                 SmallPlaylist(
                   playlist: Playlist(playlists[5]),
+                  user: user,
                 )
               ],
             )),
