@@ -21,7 +21,7 @@ class GridPlaylists extends StatelessWidget {
   Widget build(BuildContext context) {
     if (MediaQuery.of(context).size.width < 1250) {
       return Container(
-        color: Colors.black38,
+        //color: Colors.black38,
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
         child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -90,7 +90,7 @@ class GridPlaylists extends StatelessWidget {
       );
     }
     return Container(
-      color: Colors.black38,
+      //color: Colors.black38,
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       child:
           Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [

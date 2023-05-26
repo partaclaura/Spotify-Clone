@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import '../user.dart';
 import '../home/home.dart';
+import '../playlist_page/playlist_page.dart';
+import '../playlist.dart';
 
 class NavigationButton extends StatelessWidget {
   String buttonName;
@@ -34,6 +36,21 @@ class NavigationButton extends StatelessWidget {
           if (buttonName == "Home") {
             Navigator.push(context, MaterialPageRoute(builder: (builder) {
               return Home(user: user);
+            }));
+          } else if (buttonName == "Liked Songs") {
+            Navigator.push(context, MaterialPageRoute(builder: (builder) {
+              return PlaylistPage(
+                playlist: Playlist({
+                  "id": 55555,
+                  "name": "Liked Songs",
+                  "description": "",
+                  "type": "uniquely_yours",
+                  "owner": "user",
+                  "likes": 1,
+                  "songs": user.likedSongs
+                }),
+                user: user,
+              );
             }));
           }
         },

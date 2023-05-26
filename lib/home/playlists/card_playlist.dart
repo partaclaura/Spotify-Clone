@@ -59,8 +59,8 @@ class CardPlaylist extends StatelessWidget {
         },
         child: Container(
           padding: const EdgeInsets.all(12),
-          decoration:
-              BoxDecoration(color: Colors.black26, borderRadius: getRadius()),
+          decoration: BoxDecoration(
+              color: Color.fromRGBO(40, 40, 40, 1), borderRadius: getRadius()),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Container(

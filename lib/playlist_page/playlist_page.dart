@@ -18,6 +18,7 @@ class PlaylistPage extends StatelessWidget {
             child: Row(children: [
           PlaylistView(
             playlist: playlist,
+            user: user,
           )
         ])));
   }
@@ -32,6 +33,7 @@ class PlaylistPage extends StatelessWidget {
           ),
           PlaylistView(
             playlist: playlist,
+            user: user,
           )
         ])));
   }

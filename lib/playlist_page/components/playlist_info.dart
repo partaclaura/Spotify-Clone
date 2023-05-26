@@ -66,7 +66,7 @@ class PlaylistInfo extends StatelessWidget {
         ? Row(children: getComponentChildren())
         : Column(children: getComponentChildren());
     return Container(
-      color: Colors.grey,
+      color: Color.fromRGBO(48, 48, 48, 1),
       padding: const EdgeInsets.only(left: 25, right: 25, top: 60, bottom: 25),
       child: componentType,
     );

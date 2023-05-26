@@ -43,7 +43,8 @@ class _MyAppState extends State<MyApp> {
                 ? Home(
                     user: User(
                         id: snapshot.data!['id'],
-                        username: snapshot.data!['username']))
+                        username: snapshot.data!['username'],
+                        likedSongs: snapshot.data!['likedSongs']))
                 : Center(
                     child: CircularProgressIndicator(),
                   ));

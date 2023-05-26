@@ -5,10 +5,12 @@ import 'components/playlist_info.dart';
 import 'components/song_list.dart';
 import '../playlist.dart';
 import '../song.dart';
+import '../user.dart';
 
 class PlaylistView extends StatelessWidget {
   Playlist playlist;
-  PlaylistView({required this.playlist});
+  User user;
+  PlaylistView({required this.playlist, required this.user});
 
   List<Song> createSongList() {
     List<Song> songs = [];
@@ -31,7 +33,10 @@ class PlaylistView extends StatelessWidget {
                   PlaylistInfo(
                     playlist: playlist,
                   ),
-                  SongList(songList: playlist.songs),
+                  SongList(
+                    playlist: playlist,
+                    user: user,
+                  ),
                 ]))));
   }
 }

@@ -92,7 +92,7 @@ class _State extends State<PlaylistRow> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Colors.grey,
+        color: Colors.black38,
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.all(getPadding()),
         child: SingleChildScrollView(
