@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import '../../playlist.dart';
 import '../../platform.dart';
@@ -7,12 +9,12 @@ import '../../playlist_page/playlist_page.dart';
 class CardPlaylist extends StatelessWidget {
   Playlist playlist;
   User user;
-  CardPlaylist({required this.playlist, required this.user});
+  CardPlaylist({super.key, required this.playlist, required this.user});
 
   BorderRadius getRadius() {
     return isWeb()
-        ? BorderRadius.all(Radius.circular(10))
-        : BorderRadius.all(Radius.circular(2));
+        ? const BorderRadius.all(Radius.circular(10))
+        : const BorderRadius.all(Radius.circular(2));
   }
 
   double getCardSize(BuildContext context) {
@@ -45,6 +47,53 @@ class CardPlaylist extends StatelessWidget {
     return size;
   }
 
+  Widget createPlaylistImage(double size) {
+    return Container(
+      decoration: BoxDecoration(color: Colors.black, borderRadius: getRadius()),
+      height: size,
+      width: size,
+    );
+  }
+
+  Widget createPlaylistTitle() {
+    return Container(
+      padding: const EdgeInsets.all(5),
+      child: Text(
+        playlist.name,
+        style: const TextStyle(
+            fontWeight: FontWeight.bold, fontSize: 15, color: Colors.white),
+      ),
+    );
+  }
+
+  Widget createPlaylistDescription() {
+    return Container(
+      padding: const EdgeInsets.all(5),
+      child: Text(
+        playlist.description,
+        overflow: TextOverflow.ellipsis,
+        style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 12,
+            color: Color.fromRGBO(169, 169, 169, 1)),
+      ),
+    );
+  }
+
+  Widget createPlaylistContainer(double size) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+          color: const Color.fromRGBO(40, 40, 40, 1),
+          borderRadius: getRadius()),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        createPlaylistImage(size),
+        createPlaylistTitle(),
+        createPlaylistDescription(),
+      ]),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     double size = getCardSize(context);
@@ -57,39 +106,9 @@ class CardPlaylist extends StatelessWidget {
             );
           }));
         },
-        child: Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-              color: Color.fromRGBO(40, 40, 40, 1), borderRadius: getRadius()),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Container(
-              decoration:
-                  BoxDecoration(color: Colors.black, borderRadius: getRadius()),
-              height: size,
-              width: size,
-            ),
-            Container(
-              padding: const EdgeInsets.all(5),
-              child: Text(
-                playlist.name,
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                    color: Colors.white),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(5),
-              child: Text(
-                playlist.description,
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 10,
-                    color: Colors.white24),
-              ),
-            ),
-          ]),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 220),
+          child: createPlaylistContainer(size),
         ));
   }
 }

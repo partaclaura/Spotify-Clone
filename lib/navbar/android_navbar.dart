@@ -3,8 +3,8 @@ import '../user.dart';
 import '../home/home.dart';
 
 class AndroidNavBar extends StatelessWidget {
-  User user;
-  AndroidNavBar({required this.user});
+  final User user;
+  const AndroidNavBar({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +12,7 @@ class AndroidNavBar extends StatelessWidget {
       type: BottomNavigationBarType.shifting, // Shifting
       selectedItemColor: Colors.white,
       unselectedItemColor: Colors.grey,
-      items: [
+      items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
           label: 'Home',

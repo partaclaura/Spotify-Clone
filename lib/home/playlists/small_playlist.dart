@@ -5,9 +5,9 @@ import '../../user.dart';
 import '../../playlist_page/playlist_page.dart';
 
 class SmallPlaylist extends StatelessWidget {
-  Playlist playlist;
-  User user;
-  SmallPlaylist({required this.playlist, required this.user});
+  final Playlist playlist;
+  final User user;
+  const SmallPlaylist({super.key, required this.playlist, required this.user});
 
   double setWidth(BuildContext context) {
     if (isWeb()) {
@@ -38,6 +38,46 @@ class SmallPlaylist extends StatelessWidget {
     return isWeb() ? 25 : 20;
   }
 
+  Widget createPlaylistImage(double size) {
+    return Container(
+      decoration: const BoxDecoration(
+          color: Colors.black,
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(5), bottomLeft: Radius.circular(5))),
+      width: size,
+    );
+  }
+
+  Widget createPlaylistTitle() {
+    return Text(
+      playlist.name,
+      textAlign: TextAlign.left,
+      style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: setFontSize(),
+          color: Colors.white),
+    );
+  }
+
+  Widget createPlaylistBody(BuildContext context, double size) {
+    return Row(
+      children: [
+        createPlaylistImage(size),
+        Container(
+            height: size,
+            width: setWidth(context),
+            padding:
+                EdgeInsets.symmetric(vertical: setPadding(), horizontal: 6),
+            decoration: const BoxDecoration(
+                color: Color.fromRGBO(44, 44, 52, 1),
+                borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(5),
+                    bottomRight: Radius.circular(5))),
+            child: createPlaylistTitle())
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     double size = setSize();
@@ -50,37 +90,7 @@ class SmallPlaylist extends StatelessWidget {
             );
           }));
         },
-        child: Container(
-            height: size,
-            child: Row(
-              children: [
-                Container(
-                  decoration: const BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(5),
-                          bottomLeft: Radius.circular(5))),
-                  width: size,
-                ),
-                Container(
-                    height: size,
-                    width: setWidth(context),
-                    padding: EdgeInsets.symmetric(
-                        vertical: setPadding(), horizontal: 6),
-                    decoration: const BoxDecoration(
-                        color: Color.fromRGBO(44, 44, 52, 1),
-                        borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(5),
-                            bottomRight: Radius.circular(5))),
-                    child: Text(
-                      playlist.name,
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: setFontSize(),
-                          color: Colors.white),
-                    ))
-              ],
-            )));
+        child:
+            SizedBox(height: size, child: createPlaylistBody(context, size)));
   }
 }

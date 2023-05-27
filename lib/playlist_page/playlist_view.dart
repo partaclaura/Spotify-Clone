@@ -24,7 +24,7 @@ class PlaylistView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
         child: Container(
-            color: Color.fromRGBO(26, 26, 26, 1),
+            color: const Color.fromRGBO(26, 26, 26, 1),
             height: MediaQuery.of(context).size.height,
             child: SingleChildScrollView(
                 child: Column(

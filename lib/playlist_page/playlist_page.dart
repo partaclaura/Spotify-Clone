@@ -11,46 +11,37 @@ class PlaylistPage extends StatelessWidget {
   User user;
   PlaylistPage({required this.playlist, required this.user});
 
-  Widget androidPlaylistPage() {
-    return Container(
-        height: double.infinity,
-        child: SingleChildScrollView(
-            child: Row(children: [
-          PlaylistView(
-            playlist: playlist,
-            user: user,
-          )
-        ])));
-  }
-
-  Widget webPlaylistPage() {
-    return Container(
-        height: double.infinity,
-        child: SingleChildScrollView(
-            child: Row(children: [
-          LeftPannel(
-            user: user,
-          ),
-          PlaylistView(
-            playlist: playlist,
-            user: user,
-          )
-        ])));
-  }
-
   Widget createPlaylistPage() {
-    Widget pageType = (isWeb()) ? webPlaylistPage() : androidPlaylistPage();
-    return isWeb()
-        ? MaterialApp(home: Scaffold(body: pageType))
-        : MaterialApp(
-            home: Scaffold(
-            body: pageType,
-            bottomNavigationBar: AndroidNavBar(user: user),
-          ));
+    var components = isWeb()
+        ? [
+            LeftPannel(
+              user: user,
+            ),
+            PlaylistView(
+              playlist: playlist,
+              user: user,
+            )
+          ]
+        : [
+            PlaylistView(
+              playlist: playlist,
+              user: user,
+            )
+          ];
+
+    return SizedBox(
+        height: double.infinity,
+        child: SingleChildScrollView(child: Row(children: components)));
   }
 
   @override
   Widget build(BuildContext context) {
-    return createPlaylistPage();
+    return isWeb()
+        ? MaterialApp(home: Scaffold(body: createPlaylistPage()))
+        : MaterialApp(
+            home: Scaffold(
+            body: createPlaylistPage(),
+            bottomNavigationBar: AndroidNavBar(user: user),
+          ));
   }
 }

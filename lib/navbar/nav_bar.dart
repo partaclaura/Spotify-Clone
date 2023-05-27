@@ -3,8 +3,8 @@ import 'nav_buttons.dart';
 import '../user.dart';
 
 class NavBar extends StatelessWidget {
-  User user;
-  NavBar({super.key, required this.user});
+  final User user;
+  const NavBar({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {

@@ -9,6 +9,12 @@ class PlaylistButton extends StatelessWidget {
   Playlist playlist;
   User user;
   PlaylistButton({super.key, required this.playlist, required this.user});
+
+  Widget createNameText() {
+    return Text(playlist.name,
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -30,11 +36,7 @@ class PlaylistButton extends StatelessWidget {
           width: double.infinity,
           child: Wrap(
             spacing: 10,
-            children: [
-              Text(playlist.name,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 13))
-            ],
+            children: [createNameText()],
           ),
         ),
       ),

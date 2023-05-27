@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import '../../playlist.dart';
 import 'card_playlist.dart';
@@ -11,7 +13,10 @@ class PlaylistRow extends StatefulWidget {
   User user;
   String rowType;
   PlaylistRow(
-      {required this.rowName, required this.user, required this.rowType});
+      {super.key,
+      required this.rowName,
+      required this.user,
+      required this.rowType});
 
   @override
   _State get createState => _State();
@@ -78,15 +83,32 @@ class _State extends State<PlaylistRow> {
 
   Widget createRow(BuildContext context, List playlists) {
     List<Widget> cardPlaylists = createPlaylistCards(context, playlists);
-    if (isWeb()) {
-      return Row(
-        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: cardPlaylists,
-      );
-    }
+    return isWeb()
+        ? Row(
+            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: cardPlaylists,
+          )
+        : SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(children: cardPlaylists));
+  }
 
-    return SingleChildScrollView(
-        scrollDirection: Axis.horizontal, child: Row(children: cardPlaylists));
+  Widget createRowTitle() {
+    return Text(
+      widget.rowName,
+      style: const TextStyle(
+          fontWeight: FontWeight.bold, fontSize: 30, color: Colors.white),
+    );
+  }
+
+  Widget createPlaylistsRow() {
+    return FutureBuilder(
+      future: getRowPlaylists(widget.rowType),
+      builder: (BuildContext context, AsyncSnapshot<List> snapshot) =>
+          snapshot.hasData
+              ? createRow(context, snapshot.data!)
+              : const Center(child: CircularProgressIndicator()),
+    );
   }
 
   @override
@@ -98,22 +120,7 @@ class _State extends State<PlaylistRow> {
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                widget.rowName,
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 30,
-                    color: Colors.white),
-              ),
-              FutureBuilder(
-                future: getRowPlaylists(widget.rowType),
-                builder: (BuildContext context, AsyncSnapshot<List> snapshot) =>
-                    snapshot.hasData
-                        ? createRow(context, snapshot.data!)
-                        : Center(child: CircularProgressIndicator()),
-              )
-            ],
+            children: [createRowTitle(), createPlaylistsRow()],
           ),
         ));
   }

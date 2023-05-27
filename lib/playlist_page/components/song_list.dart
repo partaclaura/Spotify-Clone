@@ -5,7 +5,6 @@ import 'package:spotify_clone/playlist.dart';
 import '../../song.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
-import '../playlist_page.dart';
 import '../../user.dart';
 
 class SongList extends StatefulWidget {
@@ -34,41 +33,37 @@ class _State extends State<SongList> {
   }
 
   Widget createHeader() {
-    return Container(
-      child: Row(children: [
-        createColumn("#", 25),
-        createColumn("Title", 350),
-        createColumn("Album", 200),
-        createColumn("Date added", 240),
-        Container(
-            padding: const EdgeInsets.only(left: 5, right: 5),
-            child: const Icon(
-              Icons.schedule,
-              color: Colors.grey,
-            ))
-      ]),
-    );
+    return Row(children: [
+      createColumn("#", 25),
+      createColumn("Title", 350),
+      createColumn("Album", 200),
+      createColumn("Date added", 240),
+      Container(
+          padding: const EdgeInsets.only(left: 5, right: 5),
+          child: const Icon(
+            Icons.schedule,
+            color: Colors.grey,
+          ))
+    ]);
   }
 
   Widget createSongEntry(int index, Song song) {
-    return Container(
-      child: Row(
-        children: [
-          createColumn(index.toString(), 25),
-          createColumn(song.title, 350),
-          createColumn(song.album, 200),
-          createColumn("Date added", 200),
-          createColumn(song.length.toString(), 200, true, song.songId),
-        ],
-      ),
+    return Row(
+      children: [
+        createColumn(index.toString(), 25),
+        createColumn(song.title, 350),
+        createColumn(song.album, 200),
+        createColumn("Date added", 200),
+        createColumn(song.length.toString(), 200, true, song.songId),
+      ],
     );
   }
 
   Future updateLikedSongs(int userId, int songId) async {
     //print("CURRENT PATH: ${Directory.current.path}/lib/");
-    var fullFilePath =
-        'C:/Users/Laura/Desktop/Spotify Clone/spotify_clone/assets/users.json';
-    File jsonFile = File(fullFilePath);
+    //var fullFilePath =
+    //    'C:/Users/Laura/Desktop/Spotify Clone/spotify_clone/assets/users.json';
+    //File jsonFile = File(fullFilePath);
     final String response = await rootBundle.loadString('assets/users.json');
     dynamic data = await json.decode(response);
     setState(() {
@@ -94,19 +89,23 @@ class _State extends State<SongList> {
   }
 
   Widget getIcon(int id) {
-    if (isLiked(id)) {
-      return Icon(Icons.favorite);
-    }
-    return const Icon(Icons.favorite_border);
+    IconData icon = isLiked(id) ? Icons.favorite : Icons.favorite_border;
+    return Icon(icon, color: Colors.blue, size: 20);
   }
 
   Widget createColumn(String text, double columnWidth,
       [bool fav = false, int id = 0]) {
-    if (fav == true) {
-      return Container(
-          padding: const EdgeInsets.only(left: 5, right: 5),
-          width: columnWidth,
-          child: Row(children: [
+    var columnText = Text(
+      text,
+      style: const TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 15,
+        color: Colors.grey,
+      ),
+    );
+
+    var contents = fav == true
+        ? Row(children: [
             IconButton(
               icon: getIcon(id),
               tooltip: 'Add to favourites',
@@ -118,54 +117,44 @@ class _State extends State<SongList> {
                 }
               },
             ),
-            Text(
-              text,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 15,
-                color: Colors.grey,
-              ),
-            )
-          ]));
-    }
+            columnText
+          ])
+        : columnText;
     return Container(
         padding: const EdgeInsets.only(left: 5, right: 5),
         width: columnWidth,
-        child: Text(
-          text,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 15,
-            color: Colors.grey,
-          ),
-        ));
+        child: contents);
+  }
+
+  Widget loadSongs() {
+    return FutureBuilder(
+        future: getSongs(),
+        builder: (BuildContext context, AsyncSnapshot<List> snapshot) =>
+            snapshot.hasData
+                ? ListView.separated(
+                    shrinkWrap: true,
+                    itemCount: widget.playlist.songs.length,
+                    separatorBuilder: (BuildContext context, int index) {
+                      return const SizedBox(
+                        height: 5,
+                      );
+                    },
+                    itemBuilder: (BuildContext context, int index) {
+                      return createSongEntry(
+                          index + 1, Song(snapshot.data![index]));
+                    })
+                : const Center(child: CircularProgressIndicator()));
   }
 
   Widget createSongList() {
     return Column(
       children: [
         createHeader(),
-        Divider(
+        const Divider(
           color: Colors.grey,
           height: 0.1,
         ),
-        FutureBuilder(
-            future: getSongs(),
-            builder: (BuildContext context, AsyncSnapshot<List> snapshot) =>
-                snapshot.hasData
-                    ? ListView.separated(
-                        shrinkWrap: true,
-                        itemCount: widget.playlist.songs.length,
-                        separatorBuilder: (BuildContext context, int index) {
-                          return SizedBox(
-                            height: 10,
-                          );
-                        },
-                        itemBuilder: (BuildContext context, int index) {
-                          return createSongEntry(
-                              index + 1, Song(snapshot.data![index]));
-                        })
-                    : Center(child: CircularProgressIndicator()))
+        loadSongs()
       ],
     );
   }

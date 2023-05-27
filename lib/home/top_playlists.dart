@@ -1,14 +1,13 @@
 import 'package:spotify_clone/home/playlists/grid_playlists.dart';
 import '../user.dart';
 import '../platform.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
 
 class TopPlaylists extends StatefulWidget {
-  User user;
-  TopPlaylists({super.key, required this.user});
+  final User user;
+  const TopPlaylists({super.key, required this.user});
 
   @override
   _State get createState => _State();
@@ -67,34 +66,42 @@ class _State extends State<TopPlaylists> {
     return userPlaylists.take(6).toList();
   }
 
+  Widget createSectionTitle() {
+    return Text(
+      getMessage(),
+      style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: setMessageSize(),
+          color: Colors.white),
+    );
+  }
+
+  Widget loadPlaylists() {
+    return FutureBuilder(
+      future: getUserTopSixPlaylists(),
+      builder: (BuildContext context, AsyncSnapshot<List> snapshot) =>
+          snapshot.hasData
+              ? GridPlaylists(
+                  playlists: snapshot.data!,
+                  user: widget.user,
+                )
+              : const Center(child: CircularProgressIndicator()),
+    );
+  }
+
+  Widget createTopPlaylistsBody() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [createSectionTitle(), loadPlaylists()],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
         color: Colors.black38,
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.all(setPaddingSize()),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              getMessage(),
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: setMessageSize(),
-                  color: Colors.white),
-            ),
-            //GridPlaylists()
-            FutureBuilder(
-              future: getUserTopSixPlaylists(),
-              builder: (BuildContext context, AsyncSnapshot<List> snapshot) =>
-                  snapshot.hasData
-                      ? GridPlaylists(
-                          playlists: snapshot.data!,
-                          user: widget.user,
-                        )
-                      : Center(child: CircularProgressIndicator()),
-            )
-          ],
-        ));
+        child: createTopPlaylistsBody());
   }
 }
