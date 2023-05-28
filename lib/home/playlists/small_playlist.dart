@@ -60,6 +60,9 @@ class SmallPlaylist extends StatelessWidget {
   }
 
   Widget createPlaylistBody(BuildContext context, double size) {
+    var bodyColor = isWeb()
+        ? const Color.fromRGBO(44, 44, 52, 1)
+        : const Color.fromRGBO(40, 40, 40, 1);
     return Row(
       children: [
         createPlaylistImage(size),
@@ -68,9 +71,9 @@ class SmallPlaylist extends StatelessWidget {
             width: setWidth(context),
             padding:
                 EdgeInsets.symmetric(vertical: setPadding(), horizontal: 6),
-            decoration: const BoxDecoration(
-                color: Color.fromRGBO(44, 44, 52, 1),
-                borderRadius: BorderRadius.only(
+            decoration: BoxDecoration(
+                color: bodyColor,
+                borderRadius: const BorderRadius.only(
                     topRight: Radius.circular(5),
                     bottomRight: Radius.circular(5))),
             child: createPlaylistTitle())

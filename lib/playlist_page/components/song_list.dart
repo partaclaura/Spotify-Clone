@@ -1,11 +1,11 @@
 // ignore_for_file: use_key_in_widget_constructors, must_be_immutable
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:spotify_clone/playlist.dart';
 import '../../song.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import '../../user.dart';
+import '../../platform.dart';
 
 class SongList extends StatefulWidget {
   Playlist playlist;
@@ -33,30 +33,94 @@ class _State extends State<SongList> {
   }
 
   Widget createHeader() {
-    return Row(children: [
-      createColumn("#", 25),
-      createColumn("Title", 350),
-      createColumn("Album", 200),
-      createColumn("Date added", 240),
-      Container(
-          padding: const EdgeInsets.only(left: 5, right: 5),
-          child: const Icon(
-            Icons.schedule,
-            color: Colors.grey,
-          ))
-    ]);
+    return isWeb()
+        ? Row(children: [
+            createColumn("#", 25),
+            createColumn("Title", 350),
+            createColumn("Album", 200),
+            createColumn("Date added", 240),
+            Container(
+                padding: const EdgeInsets.only(left: 5, right: 5),
+                child: const Icon(
+                  Icons.schedule,
+                  color: Colors.grey,
+                ))
+          ])
+        : Row(
+            children: [
+              const Icon(Icons.auto_awesome_sharp,
+                  color: Colors.white, size: 30),
+              Container(
+                width: 20,
+              ),
+              const Icon(Icons.download_for_offline_outlined,
+                  color: Colors.white, size: 30),
+              Container(
+                width: 20,
+              ),
+              const Icon(Icons.person_add_outlined,
+                  color: Colors.white, size: 30),
+              Container(
+                width: 20,
+              ),
+              const Icon(Icons.more_vert, color: Colors.white, size: 30),
+              Spacer(),
+              const Icon(Icons.shuffle, color: Colors.white, size: 30),
+              Container(
+                width: 20,
+              ),
+              const Icon(Icons.play_circle, color: Colors.blue, size: 60),
+            ],
+          );
   }
 
   Widget createSongEntry(int index, Song song) {
-    return Row(
-      children: [
-        createColumn(index.toString(), 25),
-        createColumn(song.title, 350),
-        createColumn(song.album, 200),
-        createColumn("Date added", 200),
-        createColumn(song.length.toString(), 200, true, song.songId),
-      ],
-    );
+    return isWeb()
+        ? Row(
+            children: [
+              createColumn(index.toString(), 25),
+              createColumn(song.title, 350),
+              createColumn(song.album, 200),
+              createColumn("Date added", 200),
+              createColumn(song.length.toString(), 200, true, song.songId),
+            ],
+          )
+        : Row(
+            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
+                  width: 150,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        song.title,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 17,
+                            color: Colors.white),
+                      ),
+                      Container(
+                        height: 5,
+                      ),
+                      Text(
+                        song.artist,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                            color: Colors.grey),
+                      )
+                    ],
+                  )),
+              const Spacer(),
+              //createColumn('', 20, true, song.songId),
+
+              createLikeButton(widget.user.id),
+              const Icon(Icons.more_vert, color: Colors.white, size: 30)
+            ],
+          );
   }
 
   Future updateLikedSongs(int userId, int songId) async {
@@ -93,6 +157,20 @@ class _State extends State<SongList> {
     return Icon(icon, color: Colors.blue, size: 20);
   }
 
+  Widget createLikeButton(int id) {
+    return IconButton(
+      icon: getIcon(id),
+      tooltip: 'Add to favourites',
+      onPressed: () {
+        if (isLiked(id)) {
+          widget.user.likedSongs.remove(id);
+        } else {
+          widget.user.likedSongs.add(id);
+        }
+      },
+    );
+  }
+
   Widget createColumn(String text, double columnWidth,
       [bool fav = false, int id = 0]) {
     var columnText = Text(
@@ -105,20 +183,7 @@ class _State extends State<SongList> {
     );
 
     var contents = fav == true
-        ? Row(children: [
-            IconButton(
-              icon: getIcon(id),
-              tooltip: 'Add to favourites',
-              onPressed: () {
-                if (isLiked(id)) {
-                  widget.user.likedSongs.remove(id);
-                } else {
-                  widget.user.likedSongs.add(id);
-                }
-              },
-            ),
-            columnText
-          ])
+        ? Row(children: [createLikeButton(id), columnText])
         : columnText;
     return Container(
         padding: const EdgeInsets.only(left: 5, right: 5),
@@ -150,10 +215,11 @@ class _State extends State<SongList> {
     return Column(
       children: [
         createHeader(),
-        const Divider(
-          color: Colors.grey,
-          height: 0.1,
-        ),
+        if (isWeb())
+          const Divider(
+            color: Colors.grey,
+            height: 0.1,
+          ),
         loadSongs()
       ],
     );
@@ -162,7 +228,10 @@ class _State extends State<SongList> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(40),
+      width: MediaQuery.of(context).size.width,
+      padding: isWeb()
+          ? const EdgeInsets.all(40)
+          : const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
       child: createSongList(),
     );
   }

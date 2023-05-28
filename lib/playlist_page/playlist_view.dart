@@ -1,6 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors, must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:spotify_clone/platform.dart';
 import 'components/playlist_info.dart';
 import 'components/song_list.dart';
 import '../playlist.dart';
@@ -26,6 +27,7 @@ class PlaylistView extends StatelessWidget {
         child: Container(
             color: const Color.fromRGBO(26, 26, 26, 1),
             height: MediaQuery.of(context).size.height,
+            width: isWeb() ? null : MediaQuery.of(context).size.width,
             child: SingleChildScrollView(
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

@@ -60,6 +60,7 @@ class CardPlaylist extends StatelessWidget {
       padding: const EdgeInsets.all(5),
       child: Text(
         playlist.name,
+        overflow: TextOverflow.ellipsis,
         style: const TextStyle(
             fontWeight: FontWeight.bold, fontSize: 15, color: Colors.white),
       ),
@@ -81,17 +82,23 @@ class CardPlaylist extends StatelessWidget {
   }
 
   Widget createPlaylistContainer(double size) {
+    var containerColor = isWeb()
+        ? const Color.fromRGBO(40, 40, 40, 1)
+        : const Color.fromRGBO(26, 26, 26, 1);
     return Container(
       padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-          color: const Color.fromRGBO(40, 40, 40, 1),
-          borderRadius: getRadius()),
+      decoration:
+          BoxDecoration(color: containerColor, borderRadius: getRadius()),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         createPlaylistImage(size),
         createPlaylistTitle(),
         createPlaylistDescription(),
       ]),
     );
+  }
+
+  double getConstraints() {
+    return isWeb() ? 220 : 125;
   }
 
   @override
@@ -107,7 +114,7 @@ class CardPlaylist extends StatelessWidget {
           }));
         },
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 220),
+          constraints: BoxConstraints(maxWidth: getConstraints()),
           child: createPlaylistContainer(size),
         ));
   }
