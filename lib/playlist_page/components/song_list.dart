@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import '../../user.dart';
 import '../../platform.dart';
+import '../../song_page/android_song_page.dart';
 
 class SongList extends StatefulWidget {
   Playlist playlist;
@@ -88,36 +89,46 @@ class _State extends State<SongList> {
         : Row(
             // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                  width: 150,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        song.title,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 17,
-                            color: Colors.white),
-                      ),
-                      Container(
-                        height: 5,
-                      ),
-                      Text(
-                        song.artist,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
-                            color: Colors.grey),
-                      )
-                    ],
-                  )),
+              InkWell(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (builder) {
+                      return AndroidSongPage(
+                          user: widget.user,
+                          playlist: widget.playlist,
+                          song: song);
+                    }));
+                  },
+                  child: Container(
+                      width: 150,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            song.title,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 17,
+                                color: Colors.white),
+                          ),
+                          Container(
+                            height: 5,
+                          ),
+                          Text(
+                            song.artist,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                                color: Colors.grey),
+                          )
+                        ],
+                      ))),
               const Spacer(),
               //createColumn('', 20, true, song.songId),
 
-              createLikeButton(widget.user.id),
+              createLikeButton(song.songId),
               const Icon(Icons.more_vert, color: Colors.white, size: 30)
             ],
           );
