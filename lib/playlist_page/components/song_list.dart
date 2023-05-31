@@ -33,107 +33,6 @@ class _State extends State<SongList> {
     return playlistSongs;
   }
 
-  Widget createHeader() {
-    return isWeb()
-        ? Row(children: [
-            createColumn("#", 25),
-            createColumn("Title", 350),
-            createColumn("Album", 200),
-            createColumn("Date added", 240),
-            Container(
-                padding: const EdgeInsets.only(left: 5, right: 5),
-                child: const Icon(
-                  Icons.schedule,
-                  color: Colors.grey,
-                ))
-          ])
-        : Row(
-            children: [
-              const Icon(Icons.auto_awesome_sharp,
-                  color: Colors.white, size: 30),
-              Container(
-                width: 20,
-              ),
-              const Icon(Icons.download_for_offline_outlined,
-                  color: Colors.white, size: 30),
-              Container(
-                width: 20,
-              ),
-              const Icon(Icons.person_add_outlined,
-                  color: Colors.white, size: 30),
-              Container(
-                width: 20,
-              ),
-              const Icon(Icons.more_vert, color: Colors.white, size: 30),
-              Spacer(),
-              const Icon(Icons.shuffle, color: Colors.white, size: 30),
-              Container(
-                width: 20,
-              ),
-              const Icon(Icons.play_circle, color: Colors.blue, size: 60),
-            ],
-          );
-  }
-
-  Widget createSongEntry(int index, Song song) {
-    return isWeb()
-        ? Row(
-            children: [
-              createColumn(index.toString(), 25),
-              createColumn(song.title, 350),
-              createColumn(song.album, 200),
-              createColumn("Date added", 200),
-              createColumn(song.length.toString(), 200, true, song.songId),
-            ],
-          )
-        : Row(
-            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              InkWell(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (builder) {
-                      return AndroidSongPage(
-                          user: widget.user,
-                          playlist: widget.playlist,
-                          song: song);
-                    }));
-                  },
-                  child: Container(
-                      width: 150,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            song.title,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 17,
-                                color: Colors.white),
-                          ),
-                          Container(
-                            height: 5,
-                          ),
-                          Text(
-                            song.artist,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 13,
-                                color: Colors.grey),
-                          )
-                        ],
-                      ))),
-              const Spacer(),
-              //createColumn('', 20, true, song.songId),
-
-              createLikeButton(song.songId),
-              const Icon(Icons.more_vert, color: Colors.white, size: 30)
-            ],
-          );
-  }
-
   Future updateLikedSongs(int userId, int songId) async {
     //print("CURRENT PATH: ${Directory.current.path}/lib/");
     //var fullFilePath =
@@ -168,6 +67,59 @@ class _State extends State<SongList> {
     return Icon(icon, color: Colors.blue, size: 20);
   }
 
+  Widget createHeader() {
+    return isWeb()
+        ? Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+                createIndex("#"),
+                createInfo("Title", 6),
+                createInfo("Album", 4),
+                createInfo("Date added", 4),
+                Expanded(
+                    flex: 2,
+                    child: Column(children: [
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      Container(
+                          padding: const EdgeInsets.only(left: 5, right: 5),
+                          child: const Icon(
+                            Icons.schedule,
+                            color: Colors.grey,
+                            size: 20,
+                          ))
+                    ])),
+              ])
+        : Row(
+            children: [
+              const Icon(Icons.auto_awesome_sharp,
+                  color: Colors.white, size: 30),
+              Container(
+                width: 20,
+              ),
+              const Icon(Icons.download_for_offline_outlined,
+                  color: Colors.white, size: 30),
+              Container(
+                width: 20,
+              ),
+              const Icon(Icons.person_add_outlined,
+                  color: Colors.white, size: 30),
+              Container(
+                width: 20,
+              ),
+              const Icon(Icons.more_vert, color: Colors.white, size: 30),
+              const Spacer(),
+              const Icon(Icons.shuffle, color: Colors.white, size: 30),
+              Container(
+                width: 20,
+              ),
+              const Icon(Icons.play_circle, color: Colors.blue, size: 60),
+            ],
+          );
+  }
+
   Widget createLikeButton(int id) {
     return IconButton(
       icon: getIcon(id),
@@ -182,24 +134,122 @@ class _State extends State<SongList> {
     );
   }
 
-  Widget createColumn(String text, double columnWidth,
-      [bool fav = false, int id = 0]) {
-    var columnText = Text(
-      text,
-      style: const TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 15,
-        color: Colors.grey,
+  Widget createTime(String duration, int id) {
+    return Expanded(
+      flex: 2,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [createLikeButton(id), createInfo(duration, 4)],
       ),
     );
+  }
 
-    var contents = fav == true
-        ? Row(children: [createLikeButton(id), columnText])
-        : columnText;
-    return Container(
-        padding: const EdgeInsets.only(left: 5, right: 5),
-        width: columnWidth,
-        child: contents);
+  Widget createIndex(String index) {
+    return SizedBox(
+      width: 25,
+      child: Text(index,
+          style: const TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 15, color: Colors.grey)),
+    );
+  }
+
+  Widget createInfo(String info, int flexValue) {
+    return Expanded(
+      flex: flexValue,
+      child: Padding(
+          padding: const EdgeInsets.only(right: 3, top: 3),
+          child: Text(info,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                  color: Colors.grey))),
+    );
+  }
+
+  Widget createSongTitle(String title, String artist) {
+    return Expanded(
+        flex: 6,
+        child: Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Colors.white)),
+                Text(artist,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                        color: Colors.grey))
+              ],
+            )));
+  }
+
+  Widget createSongEntry(int index, Song song) {
+    return isWeb()
+        ? Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              createIndex(index.toString()),
+              createSongTitle(song.title, song.artist),
+              createInfo(song.album, 4),
+              createInfo("Date added", 4),
+              createTime(song.length.toString(), song.songId)
+            ],
+          )
+        : Row(
+            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              InkWell(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (builder) {
+                      return AndroidSongPage(
+                          user: widget.user,
+                          playlist: widget.playlist,
+                          song: song);
+                    }));
+                  },
+                  child: SizedBox(
+                      width: 150,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            song.title,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 17,
+                                color: Colors.white),
+                          ),
+                          Container(
+                            height: 5,
+                          ),
+                          Text(
+                            song.artist,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                                color: Colors.grey),
+                          )
+                        ],
+                      ))),
+              const Spacer(),
+              //createColumn('', 20, true, song.songId),
+
+              createLikeButton(song.songId),
+              const Icon(Icons.more_vert, color: Colors.white, size: 30)
+            ],
+          );
   }
 
   Widget loadSongs() {

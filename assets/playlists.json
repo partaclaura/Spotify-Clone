@@ -68,7 +68,7 @@
                     "name": "Rock Mix",
                     "description": "Playlist description",
                     "likes": 0,
-                    "songs": [12098, 12099, 13001],
+                    "songs": [12098, 12099, 13001, 13007, 13005, 13004, 13003, 13002, 13006, 13008, 13009, 13010, 13011, 13012, 13013],
                     "type": "spotify_mix",
                     "owner": "spotify",
                     "clicks": 0
