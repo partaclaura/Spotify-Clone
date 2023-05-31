@@ -29,9 +29,14 @@ class PlaylistPage extends StatelessWidget {
             )
           ];
 
-    return SizedBox(
-        height: double.infinity,
-        child: SingleChildScrollView(child: Row(children: components)));
+    return isWeb()
+        ? SizedBox(
+            height: double.infinity,
+            child: SingleChildScrollView(child: Row(children: components)))
+        : PlaylistView(
+            playlist: playlist,
+            user: user,
+          );
   }
 
   @override
@@ -40,7 +45,9 @@ class PlaylistPage extends StatelessWidget {
         ? MaterialApp(home: Scaffold(body: createPlaylistPage()))
         : MaterialApp(
             home: Scaffold(
-            body: createPlaylistPage(),
+            body: Column(children: [
+              createPlaylistPage(),
+            ]),
             bottomNavigationBar: AndroidNavBar(user: user),
           ));
   }

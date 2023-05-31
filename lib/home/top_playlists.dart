@@ -62,6 +62,7 @@ class _State extends State<TopPlaylists> {
     });
 
     userPlaylists.sort(sortByClicks);
+    print(userPlaylists.take(6).toList());
 
     return userPlaylists.take(6).toList();
   }

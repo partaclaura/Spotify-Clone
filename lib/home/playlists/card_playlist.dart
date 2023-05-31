@@ -97,8 +97,8 @@ class CardPlaylist extends StatelessWidget {
     );
   }
 
-  double getConstraints() {
-    return isWeb() ? 220 : 125;
+  double getConstraints(BuildContext context) {
+    return isWeb() ? (getCardSize(context) + 20) : 125;
   }
 
   @override
@@ -114,7 +114,7 @@ class CardPlaylist extends StatelessWidget {
           }));
         },
         child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: getConstraints()),
+          constraints: BoxConstraints(maxWidth: getConstraints(context)),
           child: createPlaylistContainer(size),
         ));
   }

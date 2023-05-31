@@ -48,10 +48,6 @@ class _State extends State<PlaylistInfo> {
     totalHours = totalMinutes ~/ 60;
     totalMinutes = totalMinutes % 60;
 
-    if (totalHours != 0) {
-      widget.playlist.duration = '$totalHours hours ';
-    }
-
     widget.playlist.duration = (totalHours != 0)
         ? '$totalHours hours $totalMinutes min $totalSeconds sec'
         : '$totalMinutes min $totalSeconds sec';

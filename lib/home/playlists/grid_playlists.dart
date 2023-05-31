@@ -17,44 +17,45 @@ class GridPlaylists extends StatelessWidget {
     return isWeb() ? 20 : 5;
   }
 
-  Widget createShortRow() {
+  Widget createShortRow(Playlist playlist1, Playlist playlist2) {
     return Row(
       children: [
         SmallPlaylist(
-          playlist: Playlist(playlists[0]),
+          playlist: playlist1,
           user: user,
         ),
         Container(
           width: setVerticalSpacing(),
         ),
         SmallPlaylist(
-          playlist: Playlist(playlists[1]),
+          playlist: playlist2,
           user: user,
         )
       ],
     );
   }
 
-  Widget createLongRow() {
+  Widget createLongRow(
+      Playlist playlist1, Playlist playlist2, Playlist playlist3) {
     return Row(
       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         SmallPlaylist(
-          playlist: Playlist(playlists[3]),
+          playlist: playlist1,
           user: user,
         ),
         Container(
           width: 20,
         ),
         SmallPlaylist(
-          playlist: Playlist(playlists[4]),
+          playlist: playlist2,
           user: user,
         ),
         Container(
           width: 20,
         ),
         SmallPlaylist(
-          playlist: Playlist(playlists[5]),
+          playlist: playlist3,
           user: user,
         )
       ],
@@ -71,21 +72,24 @@ class GridPlaylists extends StatelessWidget {
             children: [
               SizedBox(
                 width: MediaQuery.of(context).size.width,
-                child: createShortRow(),
+                child: createShortRow(
+                    Playlist(playlists[0]), Playlist(playlists[1])),
               ),
               Container(
                 height: setHorizontalSpacing(),
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
-                child: createShortRow(),
+                child: createShortRow(
+                    Playlist(playlists[2]), Playlist(playlists[3])),
               ),
               Container(
                 height: setHorizontalSpacing(),
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
-                child: createShortRow(),
+                child: createShortRow(
+                    Playlist(playlists[4]), Playlist(playlists[5])),
               ),
             ]),
       );
@@ -96,12 +100,16 @@ class GridPlaylists extends StatelessWidget {
       child:
           Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         SizedBox(
-            width: MediaQuery.of(context).size.width, child: createLongRow()),
+            width: MediaQuery.of(context).size.width,
+            child: createLongRow(Playlist(playlists[0]), Playlist(playlists[1]),
+                Playlist(playlists[2]))),
         Container(
           height: 20,
         ),
         SizedBox(
-            width: MediaQuery.of(context).size.width, child: createLongRow()),
+            width: MediaQuery.of(context).size.width,
+            child: createLongRow(Playlist(playlists[3]), Playlist(playlists[4]),
+                Playlist(playlists[5]))),
       ]),
     );
   }

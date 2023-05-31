@@ -27,7 +27,8 @@ class _State extends State<PlaylistRow> {
     return isWeb() ? 30 : 10;
   }
 
-  List<Widget> createPlaylistCards(BuildContext context, List playlists) {
+  List<Widget> createPlaylistCards(
+      BuildContext context, List playlists, String rowType) {
     List<Widget> cards = [];
     int cardsPerRow = 5;
     double dividerSize = 10;
@@ -78,11 +79,24 @@ class _State extends State<PlaylistRow> {
       if (playlist['type'] == rowType) rowPlaylists.add(playlist);
     }
 
+    if (rowType == "uniquely_yours") {
+      rowPlaylists.add({
+        "id": 55555,
+        "name": "Liked Songs",
+        "description": "",
+        "type": "uniquely_yours",
+        "owner": "user",
+        "likes": 1,
+        "songs": widget.user.likedSongs
+      });
+    }
+
     return rowPlaylists;
   }
 
-  Widget createRow(BuildContext context, List playlists) {
-    List<Widget> cardPlaylists = createPlaylistCards(context, playlists);
+  Widget createRow(BuildContext context, List playlists, String rowType) {
+    List<Widget> cardPlaylists =
+        createPlaylistCards(context, playlists, rowType);
     return isWeb()
         ? Row(
             //mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -106,7 +120,7 @@ class _State extends State<PlaylistRow> {
       future: getRowPlaylists(widget.rowType),
       builder: (BuildContext context, AsyncSnapshot<List> snapshot) =>
           snapshot.hasData
-              ? createRow(context, snapshot.data!)
+              ? createRow(context, snapshot.data!, widget.rowType)
               : const Center(child: CircularProgressIndicator()),
     );
   }

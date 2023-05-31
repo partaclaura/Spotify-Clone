@@ -218,7 +218,7 @@ class _State extends State<SongList> {
                     }));
                   },
                   child: SizedBox(
-                      width: 150,
+                      width: 250,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -258,6 +258,7 @@ class _State extends State<SongList> {
         builder: (BuildContext context, AsyncSnapshot<List> snapshot) =>
             snapshot.hasData
                 ? ListView.separated(
+                    physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: widget.playlist.songs.length,
                     separatorBuilder: (BuildContext context, int index) {
