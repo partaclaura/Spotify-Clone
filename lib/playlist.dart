@@ -6,7 +6,7 @@ class Playlist {
   String owner = "Username";
   int likes = 0;
   int songsCount = 0;
-  int minutes = 0;
+  String duration = "";
   List songs = [];
 
   Playlist(Map playlistData) {

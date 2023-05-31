@@ -3,10 +3,70 @@
 import 'package:flutter/material.dart';
 import '../../playlist.dart';
 import '../../platform.dart';
+import '../../song.dart';
+import 'dart:convert';
+import 'package:flutter/services.dart';
 
-class PlaylistInfo extends StatelessWidget {
+class PlaylistInfo extends StatefulWidget {
   Playlist playlist;
   PlaylistInfo({required this.playlist});
+
+  @override
+  _State get createState => _State();
+}
+
+class _State extends State<PlaylistInfo> {
+  Future<List> getSongs() async {
+    List playlistSongs = [];
+    final String response = await rootBundle.loadString('assets/songs.json');
+    final data = await json.decode(response);
+    setState(() {
+      List songs = data['songs'];
+      for (var song in songs) {
+        if (widget.playlist.songs.contains(song['songId'])) {
+          playlistSongs.add(song);
+        }
+      }
+    });
+
+    dynamic totalHours = 0.0;
+    int totalMinutes = 0;
+    int totalSeconds = 0;
+
+    for (var song in playlistSongs) {
+      var timeValue = song['length'];
+      int minutes = timeValue.toInt();
+      int seconds = ((timeValue - minutes) * 60).toInt();
+
+      totalMinutes += minutes;
+      totalSeconds += seconds;
+    }
+
+    totalMinutes += (totalSeconds ~/ 60);
+    totalSeconds = totalSeconds % 60;
+
+    totalHours = totalMinutes ~/ 60;
+    totalMinutes = totalMinutes % 60;
+
+    if (totalHours != 0) {
+      widget.playlist.duration = '$totalHours hours ';
+    }
+
+    widget.playlist.duration = (totalHours != 0)
+        ? '$totalHours hours $totalMinutes min $totalSeconds sec'
+        : '$totalMinutes min $totalSeconds sec';
+
+    return playlistSongs;
+  }
+
+  Widget loadDetails() {
+    return FutureBuilder(
+        future: getSongs(),
+        builder: (BuildContext context, AsyncSnapshot<List> snapshot) =>
+            snapshot.hasData
+                ? createDetails()
+                : const Center(child: CircularProgressIndicator()));
+  }
 
   TextStyle setStyle(double size) {
     return TextStyle(
@@ -18,7 +78,7 @@ class PlaylistInfo extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(top: 5, bottom: 10),
       child: Text(
-        playlist.name,
+        widget.playlist.name,
         style: setStyle(size),
       ),
     );
@@ -35,17 +95,17 @@ class PlaylistInfo extends StatelessWidget {
   Widget createDescription() {
     double size = isWeb() ? 15 : 12;
     return Text(
-      playlist.description,
+      widget.playlist.description,
       style: setStyle(size),
     );
   }
 
   Widget createDetails() {
     if (isWeb()) {
-      String details = "${playlist.owner} • "
-          "${playlist.likes} likes • "
-          "${playlist.songsCount} songs, "
-          "${playlist.minutes} min";
+      String details = "${widget.playlist.owner} • "
+          "${widget.playlist.likes} likes • "
+          "${widget.playlist.songsCount} songs, "
+          "${widget.playlist.duration}";
       return Text(
         details,
         style: setStyle(15),
@@ -59,14 +119,15 @@ class PlaylistInfo extends StatelessWidget {
           width: 5,
         ),
         Text(
-          playlist.owner,
+          widget.playlist.owner,
           style: setStyle(15),
         )
       ],
     );
 
-    String details = playlist.likes != 0 ? "${playlist.likes} likes • " : "";
-    details += "${playlist.minutes}min";
+    String details =
+        widget.playlist.likes != 0 ? "${widget.playlist.likes} likes • " : "";
+    details += widget.playlist.duration;
     var playlistDetails = Row(
       children: [
         const Icon(Icons.language, color: Colors.white, size: 20),
@@ -103,7 +164,7 @@ class PlaylistInfo extends StatelessWidget {
             if (isWeb()) Text('Playlist', style: setStyle(17)),
             setPlaylistName(),
             createDescription(),
-            createDetails()
+            loadDetails()
           ],
         ));
   }
